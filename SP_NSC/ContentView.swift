@@ -9,47 +9,54 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        NavigationStack {
+            TabView {
+                MainView().tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
                 }
-                .onDelete(perform: deleteItems)
+                Photobooth().tabItem {
+                    Image(systemName: "person.crop.square.badge.camera.fill")
+                    Text("Photobooth")
+                }
+                Events().tabItem{
+                    Image(systemName: "calendar.badge.clock")
+                    Text("Schedule")
+                }
+                Countdown().tabItem {
+                    Image(systemName: "timer")
+                    Text("Countdown")
+                }
+            }.toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {Image("SG60").resizable().scaledToFit().frame(width: 90)}
+                ToolbarItem(placement: .navigationBarTrailing) {Image(systemName: "list.dash")}
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
         }
     }
+}
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
+@main
+struct MyApp: App {
+    @AppStorage("hasLaunchedBefore") private var hasLaunchedBefore: Bool = false
+    var testing = false
+    func requestNotificationPermissions() {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                if let error = error {
+                    print("Notification permission error: \(error)")
+                }
+            }
     }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+    var body: some Scene {
+        WindowGroup {
+            if testing {ContentView()}
+            else {
+                LandingPageView()
+                .onAppear {
+                    hasLaunchedBefore = true
+                    requestNotificationPermissions()
+                }
             }
         }
     }
@@ -57,5 +64,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
