@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    init() {
+            // Set the color for unselected tab bar icons:
+        UITabBar.appearance().unselectedItemTintColor = UIColor(hex: "#ed4749")
+    }
     var body: some View {
         NavigationStack {
             TabView {
@@ -24,14 +28,18 @@ struct ContentView: View {
                     Image(systemName: "calendar.badge.clock")
                     Text("Schedule")
                 }
+                Movies().tabItem {
+                    Image(systemName: "popcorn.fill")
+                    Text("Explore")
+                }
                 Countdown().tabItem {
                     Image(systemName: "timer")
                     Text("Countdown")
                 }
             }.toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {Image("SG60").resizable().scaledToFit().frame(width: 90)}
+                ToolbarItem(placement: .navigationBarLeading) {Image("SG60-normal").resizable().scaledToFit().frame(width: 100)}
                 ToolbarItem(placement: .navigationBarTrailing) {Image(systemName: "list.dash")}
-            }
+            }.tint(Color.blue)
         }
     }
 }

@@ -7,21 +7,34 @@
 import SwiftUI
 struct LandingPageView: View {
     var body: some View {
-        NavigationStack {
-            VStack {
-                Image("SG60")
-                Text("Building Our Singapore Together").font(.custom("Lato", size: 36)).foregroundStyle(.black)
-                NavigationLink {
-                    ContentView().navigationBarBackButtonHidden(true)
-                } label: {
-                    Text("Start")
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color(hex: "#CA0119"))
-                        .cornerRadius(10)
+        NavigationStack{
+            ZStack{
+                Image("LandingPageBG").resizable().scaledToFill().ignoresSafeArea().opacity(0.6)
+                VStack {
+                    Image("SG60")
+                        .offset(y: -100)
+                    Text("Building Our Singapore Together")
+                        .font(.custom("Lato", size: 36))
+                        .foregroundColor(Color.white) // color: #FFF;
+                        .fontWeight(.black) // font-weight: 900;
+                        .frame(maxWidth: .infinity) // text-align: center;
+                        .multilineTextAlignment(.center)
+                        .offset(y: -80)
+                    NavigationLink {
+                        ContentView().navigationBarBackButtonHidden(true)
+                    } label: {
+                        Text("Enter")
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .bold))
+                            .frame(width: 312, height: 70)
+                            .background(Color(red: 202 / 255, green: 1 / 255, blue: 25 / 255))
+                            .cornerRadius(10)
+                            .offset(y: -40)
+                    }
+
                 }
-            }.background(Image("LandingPageBG").resizable().scaledToFill().ignoresSafeArea().opacity(0.6))
+            }
         }
+
     }
 }
-
