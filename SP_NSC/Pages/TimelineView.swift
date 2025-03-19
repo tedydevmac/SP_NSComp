@@ -1,16 +1,18 @@
 //
-//  TimelineView.swift
+//  MainView.swift
 //  SP_NSC
 //
 //  Created by Ted Goh on 19/3/25.
 //
-
 import SwiftUI
 
 struct TimelineView: View {
     let entries: [TimelineEntry]
-    
+    @State private var showNotice = true
     var body: some View {
+        if showNotice {
+            NoticeBar(showNotice: $showNotice, notice: "Tap each entry learn more!")
+        }
         ScrollView {
             VStack(spacing: 0) {
                 Text("Building Our\nSingapore Together")
@@ -67,7 +69,7 @@ struct TimelineItemView: View {
             .scaledToFill()
             .frame(width: 100, height: 100)
             .clipShape(Circle())
-            .overlay(Circle().stroke(Color(hex: "#CA021A"), lineWidth: 2))
+            .overlay(Circle().stroke(Color(hex: "#CA021A"), lineWidth: 5))
             .frame(maxWidth: .infinity)
             .onTapGesture {
                 showingModal = true
@@ -94,24 +96,57 @@ struct TimelineItemView: View {
 
 struct ModalView: View {
     let entry: TimelineEntry
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack {
-            Image(entry.image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200, height: 200)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color(hex: "#CA021A"), lineWidth: 2))
-                .padding()
-            Text(entry.year)
-                .font(.title)
-                .fontWeight(.bold)
-            
-            Text(entry.description).font(.subheadline)
-                .fontWeight(.medium)
+        NavigationView {
+            VStack(spacing: 20) {
+                // Image viewer
+                TabView {
+                    Image(entry.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 300)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .padding(.horizontal)
+                    Image(entry.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 300)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .padding(.horizontal)
+                    // Add more images here if needed
+                }
+                .tabViewStyle(.page)
+                .frame(height: 300)
+                
+                // Content section
+                VStack(alignment: .leading, spacing: 15) {
+                    Text(entry.year)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(Color(hex: "#CA021A"))
+                    
+                    Text(entry.description)
+                        .font(.body)
+                        .lineSpacing(5)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .foregroundColor(Color(hex: "#CA021A"))
+                }
+            }
         }
-        .padding()
+        .presentationDetents([.large])
     }
 }
 

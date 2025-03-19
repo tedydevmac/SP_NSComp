@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct EventCard: View {
-    let title: String
+        let title: String
         let location: String
         let date: String
         let imageName: String

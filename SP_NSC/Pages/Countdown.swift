@@ -48,7 +48,7 @@ struct Countdown: View {
                     .font(.caption)
                     .onAppear(perform: startCountdown)
                 }
-            }
+            }.padding(.bottom, 75)
             
             Button(action: scheduleNotification) {
                 Group {
