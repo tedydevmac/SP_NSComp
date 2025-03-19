@@ -72,27 +72,40 @@ struct Events: View {
             // Scrollable list of events
             ScrollView {
                 VStack(spacing: 16) {
-                    // First event card
                     EventCard(
-                        title: "National Day Parade",
-                        location: "Padang",
-                        date: "9/8/24",
-                        imageName: "Events"
-                    )
-                    
-                    // Next event cards
-                    ForEach(0..<3) { _ in
-                        EventCard(
-                            title: "Emu Otori Lookalike contest",
-                            location: "SST",
-                            date: "9/8/24",
-                            imageName: "Events"
-                        )
-                    }
+                                            title: "Singapore Maritime Week",
+                                            location: "EXPO@SMW",
+                                            date: "22/3/25",
+                                            imageName: "Events"
+                                        )
+                                        EventCard(
+                                            title: "SG Volunteer Management Conference",
+                                            location: "Sands Expo and Convention",
+                                            date: "28/3/25",
+                                            imageName: "Events"
+                                        )
+                                        EventCard(
+                                            title: "Start Small Dream Big Walkathon",
+                                            location: "Sentosa",
+                                            date: "11/5/25",
+                                            imageName: "Events"
+                                        )
+                                        EventCard(
+                                            title: "National Family Festival",
+                                            location: "Gardens by the bay",
+                                            date: "31/5/25",
+                                            imageName: "Events"
+                                        )
+                                        EventCard(
+                                            title: "International Conference on Cohesive Societies",
+                                            location: "Raffles Convention Center",
+                                            date: "24/6/25",
+                                            imageName: "Events"
+                                        )
                 }
                 .padding(.vertical)
             }
-            }.navigationTitle("Upcoming Events")
+            }.navigationTitle("Upcoming Events").foregroundStyle(Color.white)
         }
     }
 }
