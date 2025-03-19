@@ -50,6 +50,7 @@ struct DashboardCard: View {
 
 struct ContentView: View {
     @State private var selectedOption: DashboardOption?
+    @State private var showingModal = false
     
     // Singapore national colors
     let singaporeRed = Color(hex: "#ED1C24")
@@ -65,7 +66,7 @@ struct ContentView: View {
     
     init() {
         UITabBar.appearance().unselectedItemTintColor = UIColor(hex: "#ed4749")
-    }
+    } 
     
     var body: some View {
         NavigationStack {
@@ -102,6 +103,26 @@ struct ContentView: View {
                         }
                     }
                 }
+                
+                // Floating Action Button
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showingModal = true
+                        }) {
+                            Image(systemName: "message.badge.waveform.fill")
+                                .font(.title2)
+                                .foregroundColor(singaporeWhite)
+                                .frame(width: 60, height: 60)
+                                .background(singaporeRed)
+                                .clipShape(Circle())
+                                .shadow(color: singaporeRed.opacity(0.3), radius: 5, x: 0, y: 2)
+                        }
+                        .padding(.trailing, 20)
+                    }
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -114,6 +135,9 @@ struct ContentView: View {
                     Image(systemName: "list.dash")
                         .foregroundColor(singaporeRed)
                 }
+            }
+            .sheet(isPresented: $showingModal) {
+                AIChatModal(isPresented: $showingModal)
             }
         }.accentColor(singaporeRed)
     }
