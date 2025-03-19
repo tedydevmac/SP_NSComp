@@ -64,7 +64,7 @@ enum Category {
     }
 }
 
-struct Movies: View {
+struct Explore: View {
     @State private var currentIndex = 0
     @State private var dragOffset: CGSize = .zero
     @State private var dragOpacity: Double = 1.0
@@ -74,7 +74,8 @@ struct Movies: View {
     
     // 1. A flag that determines if the notice bar is shown
     @State private var showNotice = true
-    
+    @State private var showSecondNotice = true
+
     // Convenience to pick items from the enum
     var items: [Item] {
         switch currentCategory {
@@ -93,9 +94,11 @@ struct Movies: View {
             
             // 3. Conditionally show the notice bar at the top
             if showNotice {
-                NoticeBar(showNotice: $showNotice)
-                Spacer()
+                NoticeBar(showNotice: $showNotice, notice: "Swipe to see more items, tap to learn more!")
             }
+            if showSecondNotice {
+                NoticeBar(showNotice: $showSecondNotice, notice: "Tap on the title to switch categories")
+                }
             
             // 4. Existing content
             Text(currentCategory.title)
@@ -207,10 +210,10 @@ struct Movies: View {
 
 struct NoticeBar: View {
     @Binding var showNotice: Bool
-    
+    var notice: String
     var body: some View {
         HStack {
-            Text("Swipe to see more items, tap to learn more!")
+            Text(notice)
                 .foregroundColor(.white)
                 .font(.subheadline)
             
@@ -236,5 +239,5 @@ struct NoticeBar: View {
 
 
 #Preview {
-    Movies()
+    Explore()
 }

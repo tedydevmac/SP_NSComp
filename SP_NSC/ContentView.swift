@@ -28,7 +28,7 @@ struct ContentView: View {
                     Image(systemName: "calendar.badge.clock")
                     Text("Schedule")
                 }
-                Movies().tabItem {
+                Explore().tabItem {
                     Image(systemName: "popcorn.fill")
                     Text("Explore")
                 }
