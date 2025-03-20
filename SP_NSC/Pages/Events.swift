@@ -7,66 +7,81 @@
 import SwiftUI
 
 struct EventCard: View {
-        let title: String
-        let location: String
-        let date: String
-        let imageName: String
-        
-        var body: some View {
-            ZStack(alignment: .bottomLeading) {
-                // Background image
-                Image(imageName)
-                    .resizable()
-                    .scaledToFill()
-                    // Give the card a fixed height
-                    .frame(height: 200)
-                    .clipped()
-                    .overlay(
-                            Color.black.opacity(0.5) // Adjust opacity as needed
-                        )
-                
-                // A gradient overlay (optional) to darken the bottom area for text legibility
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.5)]),
-                    startPoint: .center,
-                    endPoint: .bottom
+    let title: String
+    let location: String
+    let date: String
+    let imageName: String
+    
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            // Background image
+            Image(imageName)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 375, height: 200) // Fixed size
+                .clipped()
+                .overlay(
+                    Color.black.opacity(0.5) // Adjust opacity as needed
                 )
-                
-                // Text content
-                VStack(alignment: .leading, spacing: 4) {
+            
+            // A gradient overlay (optional) to darken the bottom area for text legibility
+            LinearGradient(
+                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.5)]),
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            
+            // Text content
+            VStack(alignment: .leading, spacing: 4) {
+                // Title with truncation
+                if !title.isEmpty {
                     Text(title)
                         .font(.headline)
                         .foregroundColor(.white)
-                    
-                    // Location and date row
-                    HStack {
-                        HStack(spacing: 2) {
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading) // Dynamic width
+                }
+                
+                // Location and date row (only shown if data is available)
+                HStack {
+                    if !location.isEmpty {
+                        HStack(spacing: 4) {
                             Image(systemName: "mappin.and.ellipse")
                                 .foregroundColor(.white)
                             Text(location)
                                 .foregroundColor(.white)
                                 .font(.subheadline)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                         }
+                    }
+                    
+                    if !date.isEmpty {
+                        Spacer(minLength: location.isEmpty ? 0 : 8) // Remove extra space if location is empty
                         
-                        Spacer()
-                        
-                        HStack(spacing: 2) {
+                        HStack(spacing: 4) {
                             Image(systemName: "calendar")
                                 .foregroundColor(.white)
                             Text(date)
                                 .foregroundColor(.white)
                                 .font(.subheadline)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                         }
                     }
                 }
-                .padding() // Padding for the text inside the ZStack
             }
-            // Round the corners slightly
-            .cornerRadius(10)
-            .shadow(radius: 3)
-            .padding(.horizontal)
+            .padding()
+        }
+        .frame(width: 375) // Fixed width
+        .cornerRadius(10)
+        .shadow(radius: 3)
+        .padding(.horizontal)
     }
 }
+
+
 
 struct Events: View {
     var body: some View {
