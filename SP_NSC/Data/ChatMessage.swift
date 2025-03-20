@@ -10,43 +10,91 @@ import Foundation
 // Simple message model for the chat UI.
 struct ChatMessage: Identifiable {
     let id = UUID()
-    let role: String   // "user" or "assistant"
+    let role: String   // "user", "assistant", or "system"
     let content: String
 }
 
-// Request payload with "model" and "input".
-struct ChatRequest: Codable {
+// Request payload for creating an assistant
+struct AssistantRequest: Codable {
+    let instructions: String
+    let name: String
+    let tools: [Tool]
     let model: String
-    let input: String
+    
+    struct Tool: Codable {
+        let type: String
+    }
 }
 
-// The expected response structure.
-struct ChatResponse: Codable {
+// Response structure for assistant creation
+struct AssistantResponse: Codable {
     let id: String
     let object: String
     let created_at: Int
-    let status: String
+    let name: String
+    let description: String?
     let model: String
-    let output: [OutputMessage]
+    let instructions: String
+    let tools: [AssistantRequest.Tool]
+}
+
+// Response structure for thread creation
+struct ThreadResponse: Codable {
+    let id: String
+    let object: String
+    let created_at: Int
+}
+
+// Request payload for creating a thread message
+struct ThreadMessageRequest: Codable {
+    let role: String
+    let content: String
+}
+
+// Response structure for messages
+struct ThreadMessageResponse: Codable {
+    let data: [Message]
     
-    struct OutputMessage: Codable, Identifiable {
-        var id: String { uniqueId }
-        let uniqueId: String
-        let type: String
-        let status: String
+    struct Message: Codable {
+        let id: String
+        let object: String
+        let created_at: Int
         let role: String
-        let content: [ContentBlock]
+        let content: [Content]
         
-        struct ContentBlock: Codable {
+        struct Content: Codable {
             let type: String
-            let text: String
-            let annotations: [String]  // Adjust type if needed.
+            let text: Text
+            
+            struct Text: Codable {
+                let value: String
+            }
         }
-        
-        // Map JSON key "id" to "uniqueId" if necessary.
-        private enum CodingKeys: String, CodingKey {
-            case uniqueId = "id"
-            case type, status, role, content
-        }
+    }
+}
+
+// Response structure for run creation
+struct RunResponse: Codable {
+    let id: String
+    let object: String
+    let created_at: Int
+    let assistant_id: String
+    let thread_id: String
+    let status: String
+}
+
+// Response structure for run status
+struct RunStatusResponse: Codable {
+    let id: String
+    let object: String
+    let created_at: Int
+    let assistant_id: String
+    let thread_id: String
+    let status: String
+    let last_error: RunError?
+    
+    struct RunError: Codable {
+        let code: String
+        let message: String
     }
 }

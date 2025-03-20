@@ -62,7 +62,7 @@ struct OnboardingPageContent: View {
             
             if isLastPage {
                 NavigationLink {
-                    ContentView().navigationBarBackButtonHidden(true)
+                    SignupView().navigationBarBackButtonHidden(true)
                 } label: {
                     Text("Enter")
                         .foregroundColor(.white)

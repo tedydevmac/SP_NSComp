@@ -34,44 +34,42 @@ struct ChatMessageView: View {
 }
 
 struct AIChatModal: View {
-    @Binding var isPresented: Bool
     @StateObject private var viewModel = ChatViewModel()
     @State private var userInput = ""
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                        ScrollView {
-                            VStack(spacing: 10) {
-                                ForEach(viewModel.messages) { message in
-                                    ChatMessageView(message: message)
-                                }
-                            }
-                            .padding(.vertical)
-                        }
-                        
-                        HStack {
-                            TextField("Type a message...", text: $userInput)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding(.leading)
-                            
-                            Button(action: {
-                                                guard !userInput.isEmpty else { return }
-                                                viewModel.sendMessage(userInput)
-                                                userInput = ""
-                                            }) {
-                                                Image(systemName: "paperplane.fill")
-                                                    .foregroundColor(.white)
-                                                    .padding()
-                                                    .background(singaporeRed)
-                                                    .clipShape(Circle())
-                                            }
-                            .padding(.trailing)
-                        }
-                        .padding(.vertical)
+        VStack {
+            ScrollView {
+                VStack(spacing: 10) {
+                    ForEach(viewModel.messages) { message in
+                        ChatMessageView(message: message)
                     }
-            .navigationBarItems(trailing: Button("Done") {
-                isPresented = false
-            }).tint(singaporeRed)
+                }
+                .padding(.vertical)
+            }
+            
+            HStack {
+                TextField("Type a message...", text: $userInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.leading)
+                
+                Button(action: {
+                    guard !userInput.isEmpty else { return }
+                    viewModel.sendMessage(userInput)
+                    userInput = ""
+                }) {
+                    Image(systemName: "paperplane.fill")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(singaporeRed)
+                        .clipShape(Circle())
+                }
+                .padding(.trailing)
+            }
+            .padding(.vertical)
         }
+        .navigationTitle("AI Chat")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
