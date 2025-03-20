@@ -33,7 +33,7 @@ class ChatViewModel: ObservableObject {
         }
         
         let assistantRequest = AssistantRequest(
-            instructions: "You are an assistant for the SG60 app. Help users learn about Singapore's history and culture by acting as a trivia bot.",
+            instructions: "You are an assistant for the SG60 app. Help users learn about Singapore's history and culture by acting as a trivia bot. When you send a response, make sure the text does not include any styling like bold text because it appears as astericks from raw json.",
             name: "SG60 Assistant",
             tools: [AssistantRequest.Tool(type: "code_interpreter")],
             model: "gpt-4o"

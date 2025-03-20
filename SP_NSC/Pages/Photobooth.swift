@@ -4,6 +4,12 @@
 //
 //  Created by Ted Goh on 19/3/25.
 //
+//
+//  Photobooth.swift
+//  SP_NSC
+//
+//  Created by Ted Goh on 19/3/25.
+//
 
 import SwiftUI
 import AVFoundation
@@ -172,7 +178,6 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     @Published var isSaved = false
     @Published var picData = Data(count: 0)
     @Published var detectedFaces: [VNFaceObservation] = []
-    @StateObject private var userManager = UserManager.shared
     
     private var videoDataOutput: AVCaptureVideoDataOutput?
     
@@ -280,8 +285,11 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     }
     
     func takePic(){
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .background).async{
             self.output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
+            DispatchQueue.main.async{
+                withAnimation{self.isTaken.toggle()}
+            }
         }
     }
     
@@ -298,15 +306,28 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if error != nil { return }
+        if error != nil{
+            print(error)
+            return
+        }
+        print("Pic taken")
         
-        guard let imageData = photo.fileDataRepresentation() else { return }
-        self.picData = imageData
+        guard let imageData = photo.fileDataRepresentation() else{return}
         
-        // Award points for taking a photo
-        userManager.addPoints(50, for: "photobooth")
+        // Perform face detection on captured photo
+        if let image = UIImage(data: imageData) {
+            detectFaces(in: image)
+            // Create composite image with sunglasses
+            if let compositeImage = createCompositeImage(originalImage: image, faces: detectedFaces) {
+                self.picData = compositeImage.jpegData(compressionQuality: 0.8) ?? imageData
+            } else {
+                self.picData = imageData
+            }
+        } else {
+            self.picData = imageData
+        }
         
-        withAnimation { self.isTaken.toggle() }
+        self.session.stopRunning()
     }
     
     // Create composite image with sunglasses
