@@ -29,4 +29,9 @@ We managed to nail 90% of the functionality, including UI, within the first day
 
 ## What's next for SG60portal
 - More props for photobooth
-- More information 
+- More information
+- General stability and bugfixes
+- UI improvements
+
+## Devpost
+https://devpost.com/software/sg60portal 
