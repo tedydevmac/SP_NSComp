@@ -39,9 +39,24 @@ struct OnboardingPageContent: View {
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             if !isFirstPage {
-                LottieView(url: Bundle.main.url(forResource: "placeholder", withExtension: "lottie")!)
+                if let gifName = page.gifName, let url = Bundle.main.url(forResource: gifName, withExtension: "lottie") {
+                    LottieView(url: url)
+                        .frame(width: 250, height: 250)
+                        .offset(y: -80)
+                } else {
+                    // Fallback image or empty space if no gifName is available
+                    Image("SG60")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 250, height: 250)
+                        .offset(y: -80)
+                }
             } else {
-                Image("SG60").resizable().scaledToFit().frame(width: 250, height: 250).offset(y: -80)
+                Image("SG60")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 250, height: 250)
+                    .offset(y: -80)
             }
             
             Text(page.title)
@@ -51,7 +66,7 @@ struct OnboardingPageContent: View {
                 .multilineTextAlignment(.center)
                 .offset(y: -80)
             
-            if !isFirstPage{
+            if !isFirstPage {
                 Text(page.description)
                     .font(.custom("Lato", size: 18))
                     .foregroundColor(isFirstPage ? .white : .black)
@@ -77,6 +92,7 @@ struct OnboardingPageContent: View {
     }
 }
 
+
 struct LandingPageView: View {
     @State private var currentPage = 0
     
@@ -90,20 +106,20 @@ struct LandingPageView: View {
         OnboardingPage(
             image: "LandingPageBG",
             title: "Smart Features",
-            description: "Access powerful tools and features designed to enhance your experience",
-            gifName: "feature_demo"
+            description: "Usage of AI and Computer vision to make your app experience more fun and interactive",
+            gifName: "placeholder"
         ),
         OnboardingPage(
             image: "SG60",
             title: "Easy Navigation",
-            description: "Intuitive interface for seamless interaction with all app features",
-            gifName: "navigation_demo"
+            description: "Easily swap between features and pages",
+            gifName: "travel"
         ),
         OnboardingPage(
             image: "SG60",
             title: "Get Started",
-            description: "Join us in making Singapore an even better place to live",
-            gifName: nil
+            description: "Join us in diving into Singapores SG60 culture",
+            gifName: "starting"
         )
     ]
     
