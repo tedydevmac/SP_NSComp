@@ -111,8 +111,8 @@ struct LandingPageView: View {
         ),
         OnboardingPage(
             image: "SG60",
-            title: "Easy Navigation",
-            description: "Easily swap between features and pages",
+            title: "Gamification",
+            description: "Added features for more engagement and enjoyment through the use of interactive elements and achievements",
             gifName: "travel"
         ),
         OnboardingPage(
