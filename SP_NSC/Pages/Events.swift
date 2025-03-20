@@ -21,6 +21,9 @@ struct EventCard: View {
                     // Give the card a fixed height
                     .frame(height: 200)
                     .clipped()
+                    .overlay(
+                            Color.black.opacity(0.5) // Adjust opacity as needed
+                        )
                 
                 // A gradient overlay (optional) to darken the bottom area for text legibility
                 LinearGradient(
@@ -76,31 +79,31 @@ struct Events: View {
                                             title: "Singapore Maritime Week",
                                             location: "EXPO@SMW",
                                             date: "22/3/25",
-                                            imageName: "Events"
+                                            imageName: "maritime"
                                         )
                                         EventCard(
                                             title: "SG Volunteer Management Conference",
                                             location: "Sands Expo and Convention",
                                             date: "28/3/25",
-                                            imageName: "Events"
+                                            imageName: "volunteer"
                                         )
                                         EventCard(
                                             title: "Start Small Dream Big Walkathon",
                                             location: "Sentosa",
                                             date: "11/5/25",
-                                            imageName: "Events"
+                                            imageName: "walkathon"
                                         )
                                         EventCard(
                                             title: "National Family Festival",
                                             location: "Gardens by the bay",
                                             date: "31/5/25",
-                                            imageName: "Events"
+                                            imageName: "family"
                                         )
                                         EventCard(
                                             title: "International Conference on Cohesive Societies",
                                             location: "Raffles Convention Center",
                                             date: "24/6/25",
-                                            imageName: "Events"
+                                            imageName: "cohesive"
                                         )
                 }
                 .padding(.vertical)
