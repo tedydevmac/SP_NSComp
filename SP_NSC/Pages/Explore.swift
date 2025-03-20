@@ -26,10 +26,14 @@ struct Explore: View {
     @State private var dragRotation: Double = 0
     
     @State private var currentCategory: Category = .movies
+    @StateObject private var userManager = UserManager.shared
     
     // 1. A flag that determines if the notice bar is shown
     @State private var showNotice = true
     @State private var showSecondNotice = true
+
+    // Track if points have been awarded for current category
+    @State private var hasAwardedPoints = false
 
     // Convenience to pick items from the enum
     var items: [Item] {
@@ -70,6 +74,7 @@ struct Explore: View {
                             currentCategory = .movies
                         }
                         currentIndex = 0
+                        hasAwardedPoints = false
                     }
                 }
             
@@ -153,6 +158,13 @@ struct Explore: View {
                 }
             }
             .padding()
+        }
+        .onChange(of: currentIndex) { newIndex in
+            // Award points when user views multiple items in a category
+            if newIndex > 0 && !hasAwardedPoints {
+                userManager.addPoints(30, for: "explore")
+                hasAwardedPoints = true
+            }
         }
     }
     

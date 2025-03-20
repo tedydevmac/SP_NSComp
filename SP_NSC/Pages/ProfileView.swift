@@ -49,12 +49,20 @@ struct ProfileView: View {
                     
                     // Achievements Section
                     VStack(alignment: .leading, spacing: 15) {
-                        Text("Achievements")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal)
+                        HStack {
+                            Text("Achievements")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            
+                            Spacer()
+                            
+                            Text("\(user.achievements.filter { $0.isUnlocked }.count)/\(userManager.getAllAchievements().count)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.horizontal)
                         
-                        ForEach(user.achievements) { achievement in
+                        ForEach(userManager.getAllAchievements()) { achievement in
                             AchievementRow(achievement: achievement, singaporeRed: singaporeRed)
                         }
                     }

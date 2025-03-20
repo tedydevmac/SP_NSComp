@@ -32,7 +32,6 @@
 		72DF60932D899C7400B43F56 /* SP_NSC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SP_NSC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72DF60A52D899C7500B43F56 /* SP_NSCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP_NSCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72DF60AF2D899C7500B43F56 /* SP_NSCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP_NSCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		72DF60C02D899C7500B43F56 /* SP_NSC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SP_NSC.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

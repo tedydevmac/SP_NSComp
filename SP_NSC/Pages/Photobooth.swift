@@ -172,6 +172,7 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     @Published var isSaved = false
     @Published var picData = Data(count: 0)
     @Published var detectedFaces: [VNFaceObservation] = []
+    @StateObject private var userManager = UserManager.shared
     
     private var videoDataOutput: AVCaptureVideoDataOutput?
     
@@ -279,11 +280,8 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     }
     
     func takePic(){
-        DispatchQueue.global(qos: .background).async{
+        DispatchQueue.global(qos: .background).async {
             self.output.capturePhoto(with: AVCapturePhotoSettings(), delegate: self)
-            DispatchQueue.main.async{
-                withAnimation{self.isTaken.toggle()}
-            }
         }
     }
     
@@ -300,28 +298,15 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     }
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if error != nil{
-            print(error)
-            return
-        }
-        print("Pic taken")
+        if error != nil { return }
         
-        guard let imageData = photo.fileDataRepresentation() else{return}
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        self.picData = imageData
         
-        // Perform face detection on captured photo
-        if let image = UIImage(data: imageData) {
-            detectFaces(in: image)
-            // Create composite image with sunglasses
-            if let compositeImage = createCompositeImage(originalImage: image, faces: detectedFaces) {
-                self.picData = compositeImage.jpegData(compressionQuality: 0.8) ?? imageData
-            } else {
-                self.picData = imageData
-            }
-        } else {
-            self.picData = imageData
-        }
+        // Award points for taking a photo
+        userManager.addPoints(50, for: "photobooth")
         
-        self.session.stopRunning()
+        withAnimation { self.isTaken.toggle() }
     }
     
     // Create composite image with sunglasses

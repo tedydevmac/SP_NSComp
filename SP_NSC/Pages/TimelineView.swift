@@ -9,6 +9,9 @@ import SwiftUI
 struct TimelineView: View {
     let entries: [TimelineEntry]
     @State private var showNotice = true
+    @StateObject private var userManager = UserManager.shared
+    @State private var hasAwardedPoints = false
+    
     var body: some View {
         if showNotice {
             NoticeBar(showNotice: $showNotice, notice: "Tap each entry learn more!")
@@ -23,6 +26,12 @@ struct TimelineView: View {
                 
                 ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
                     TimelineItemView(entry: entry, isLeft: index % 2 == 0)
+                        .onTapGesture {
+                            if !hasAwardedPoints {
+                                userManager.addPoints(25, for: "timeline")
+                                hasAwardedPoints = true
+                            }
+                        }
                 }
             }
             .padding()

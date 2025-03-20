@@ -37,11 +37,12 @@ struct AIChatModal: View {
     @StateObject private var viewModel = ChatViewModel()
     @State private var userInput = ""
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var userManager = UserManager.shared
     
     var body: some View {
         VStack {
             ScrollView {
-                VStack(spacing: 10) {
+                LazyVStack(spacing: 12) {
                     ForEach(viewModel.messages) { message in
                         ChatMessageView(message: message)
                     }
@@ -50,26 +51,34 @@ struct AIChatModal: View {
             }
             
             HStack {
-                TextField("Type a message...", text: $userInput)
+                TextField("Ask about Singapore...", text: $userInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.leading)
+                    .padding(.horizontal)
                 
-                Button(action: {
-                    guard !userInput.isEmpty else { return }
-                    viewModel.sendMessage(userInput)
-                    userInput = ""
-                }) {
-                    Image(systemName: "paperplane.fill")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(singaporeRed)
-                        .clipShape(Circle())
+                Button(action: sendMessage) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .font(.title2)
+                        .foregroundColor(singaporeRed)
                 }
+                .disabled(userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 .padding(.trailing)
             }
             .padding(.vertical)
         }
-        .navigationTitle("AI Chat")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Singapore Trivia")
+    }
+    
+    private func sendMessage() {
+        let trimmedInput = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedInput.isEmpty else { return }
+        
+        // Award points for asking a question
+        userManager.addPoints(25, for: "trivia")
+        
+        viewModel.sendMessage(trimmedInput)
+        userInput = ""
     }
 }
