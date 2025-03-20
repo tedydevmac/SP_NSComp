@@ -159,7 +159,7 @@ struct Explore: View {
             }
             .padding()
         }
-        .onChange(of: currentIndex) { newIndex in
+        .onChange(of: currentIndex) { oldIndex, newIndex in
             // Award points when user views multiple items in a category
             if newIndex > 0 && !hasAwardedPoints {
                 userManager.addPoints(30, for: "explore")

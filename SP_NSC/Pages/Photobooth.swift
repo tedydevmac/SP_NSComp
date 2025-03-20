@@ -256,7 +256,7 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
             
             // Configure video orientation and mirroring
             if let connection = videoOutput.connection(with: .video) {
-                connection.videoOrientation = .portrait
+                connection.videoRotationAngle = 90 // Replace videoOrientation with videoRotationAngle
                 if connection.isVideoMirroringSupported {
                     connection.isVideoMirrored = !backCam
                 }
@@ -307,7 +307,7 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if error != nil{
-            print(error)
+            print(error as Any) // Explicitly cast error to Any
             return
         }
         print("Pic taken")
@@ -419,7 +419,7 @@ class CameraModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate, AV
         try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform([request])
         
         // Apply smoothing to face detection
-        if let newFaces = request.results as? [VNFaceObservation] {
+        if let newFaces = request.results {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 

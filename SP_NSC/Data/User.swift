@@ -9,11 +9,11 @@ struct User: Codable {
     var joinDate: Date
     
     struct Achievement: Codable, Identifiable {
-        let id = UUID()
+        var id: UUID = UUID()
         let title: String
         let description: String
         let icon: String
         let dateEarned: Date
         let isUnlocked: Bool
     }
-} 
+}

@@ -84,11 +84,9 @@ struct AIChatModal: View {
                     }
                     .padding(.vertical, 8)
                 }
-                .onChange(of: viewModel.messages.count) { _ in
-                    withAnimation {
-                        if let lastMessage = viewModel.messages.last {
-                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                        }
+                .onChange(of: viewModel.messages.count) {
+                    if let lastMessage = viewModel.messages.last {
+                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
                     }
                 }
             }
@@ -159,9 +157,10 @@ struct LoadingDots: View {
                     .frame(width: 8, height: 8)
                     .scaleEffect(animate ? 1.2 : 0.8)
                     .animation(
-                        Animation.easeInOut(duration: 0.6)
+                        .easeInOut(duration: 0.6)
                             .repeatForever()
-                            .delay(0.2 * Double(index))
+                            .delay(0.2 * Double(index)),
+                        value: animate
                     )
             }
         }
