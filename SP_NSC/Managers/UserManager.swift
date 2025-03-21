@@ -13,6 +13,7 @@ class UserManager: ObservableObject {
     private let userDefaultsKey = "currentUser"
     private let allUsersKey = "allUsers"
     private let lastEmailKey = "lastUsedEmail"
+    private let achievementManager = AchievementManager()
     
     private init() {
         loadUser()
@@ -27,7 +28,7 @@ class UserManager: ObservableObject {
             UserDefaults.standard.set(user.email, forKey: lastEmailKey)
             
             var allUsers = getAllUsers()
-            if !allUsers.contains(where: { $0.email == user.email }) {
+            if (!allUsers.contains(where: { $0.email == user.email })) {
                 allUsers.append(user)
                 if let encoded = try? JSONEncoder().encode(allUsers) {
                     UserDefaults.standard.set(encoded, forKey: allUsersKey)
@@ -126,144 +127,17 @@ class UserManager: ObservableObject {
         user.points += amount
         
         // Check for achievements based on points
-        checkPointsAchievements(user.points)
+        achievementManager.checkPointsAchievements(for: &user)
         
         // Check for specific action achievements
-        checkActionAchievements(action)
+        achievementManager.checkActionAchievements(for: &user, action: action)
         
         currentUser = user
-    }
-    
-    private func checkPointsAchievements(_ totalPoints: Int) {
-        guard var user = currentUser else { return }
-        
-        // Points milestones
-        let pointsAchievements = [
-            (100, "First Milestone", "Earned 100 points!", "star.fill"),
-            (500, "Halfway There", "Earned 500 points!", "star.circle.fill"),
-            (1000, "Point Master", "Earned 1000 points!", "star.square.fill")
-        ]
-        
-        for (points, title, description, icon) in pointsAchievements {
-            if totalPoints >= points && !user.achievements.contains(where: { $0.title == title }) {
-                user.achievements.append(User.Achievement(
-                    title: title,
-                    description: description,
-                    icon: icon,
-                    dateEarned: Date(),
-                    isUnlocked: true
-                ))
-            }
-        }
-        
-        currentUser = user
-    }
-    
-    private func checkActionAchievements(_ action: String) {
-        guard var user = currentUser else { return }
-        
-        // Action-specific achievements
-        switch action {
-        case "photobooth":
-            if !user.achievements.contains(where: { $0.title == "Photobooth Pro" }) {
-                user.achievements.append(User.Achievement(
-                    title: "Photobooth Pro",
-                    description: "Used the photobooth feature!",
-                    icon: "camera.fill",
-                    dateEarned: Date(),
-                    isUnlocked: true
-                ))
-            }
-        case "trivia":
-            if !user.achievements.contains(where: { $0.title == "Trivia Master" }) {
-                user.achievements.append(User.Achievement(
-                    title: "Trivia Master",
-                    description: "Played Singapore Trivia!",
-                    icon: "questionmark.circle.fill",
-                    dateEarned: Date(),
-                    isUnlocked: true
-                ))
-            }
-        case "explore":
-            if !user.achievements.contains(where: { $0.title == "Culture Explorer" }) {
-                user.achievements.append(User.Achievement(
-                    title: "Culture Explorer",
-                    description: "Explored Singapore's culture!",
-                    icon: "map.fill",
-                    dateEarned: Date(),
-                    isUnlocked: true
-                ))
-            }
-        case "timeline":
-            if !user.achievements.contains(where: { $0.title == "History Buff" }) {
-                user.achievements.append(User.Achievement(
-                    title: "History Buff",
-                    description: "Explored Singapore's history!",
-                    icon: "book.fill",
-                    dateEarned: Date(),
-                    isUnlocked: true
-                ))
-            }
-        default:
-            break
-        }
-        
-        currentUser = user
-    }
-    
-    private func getAllPossibleAchievements() -> [User.Achievement] {
-        // Welcome achievement
-        let welcomeAchievement = User.Achievement(
-            title: "Welcome to SG60",
-            description: "You've joined the SG60 community!",
-            icon: "star.fill",
-            dateEarned: Date(),
-            isUnlocked: false
-        )
-        
-        // Points milestones
-        let pointsAchievements = [
-            (100, "First Milestone", "Earned 100 points!", "star.fill"),
-            (500, "Halfway There", "Earned 500 points!", "star.circle.fill"),
-            (1000, "Point Master", "Earned 1000 points!", "star.square.fill")
-        ].map { points, title, description, icon in
-            User.Achievement(
-                title: title,
-                description: description,
-                icon: icon,
-                dateEarned: Date(),
-                isUnlocked: false
-            )
-        }
-        
-        // Feature achievements
-        let featureAchievements = [
-            ("Photobooth Pro", "Used the photobooth feature!", "camera.fill"),
-            ("Trivia Master", "Played Singapore Trivia!", "questionmark.circle.fill"),
-            ("Culture Explorer", "Explored Singapore's culture!", "map.fill"),
-            ("History Buff", "Explored Singapore's history!", "book.fill")
-        ].map { title, description, icon in
-            User.Achievement(
-                title: title,
-                description: description,
-                icon: icon,
-                dateEarned: Date(),
-                isUnlocked: false
-            )
-        }
-        
-        return [welcomeAchievement] + pointsAchievements + featureAchievements
     }
     
     func getAllAchievements() -> [User.Achievement] {
-        guard let user = currentUser else { return getAllPossibleAchievements() }
+        guard let user = currentUser else { return achievementManager.getAllPossibleAchievements() }
         
-        let allPossible = getAllPossibleAchievements()
-        return allPossible.map { possible in
-            if let unlocked = user.achievements.first(where: { $0.title == possible.title }) {
-                return unlocked
-            }
-            return possible
-        }
+        return achievementManager.getAllAchievements(for: user)
     }
-} 
+}

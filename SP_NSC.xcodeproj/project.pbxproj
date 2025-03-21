@@ -34,22 +34,9 @@
 		72DF60AF2D899C7500B43F56 /* SP_NSCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SP_NSCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		728CB1762D8C0AD900A6F9DC /* Exceptions for "SP_NSC" folder in "SP_NSC" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"SP-NSC-Info.plist",
-			);
-			target = 72DF60922D899C7400B43F56 /* SP_NSC */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		72DF60952D899C7400B43F56 /* SP_NSC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				728CB1762D8C0AD900A6F9DC /* Exceptions for "SP_NSC" folder in "SP_NSC" target */,
-			);
 			path = SP_NSC;
 			sourceTree = "<group>";
 		};

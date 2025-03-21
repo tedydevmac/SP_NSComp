@@ -101,10 +101,8 @@ struct Countdown: View {
                 content.body = "SG60 event is happening tomorrow!"
                 content.sound = UNNotificationSound.default
                 
-                // Calculate the notification time (one day before the event)
-                let notificationDate = Calendar.current.date(byAdding: .day, value: -1, to: countdownDate)!
-                let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate)
-                let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
+                // Calculate the notification time (3 seconds from now)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
                 
                 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
                 
@@ -113,6 +111,7 @@ struct Countdown: View {
                     if let error = error {
                         print("Error scheduling notification: \(error)")
                     } else {
+                        print("Notification scheduled for 3 seconds from now") // Debugging print statement
                         DispatchQueue.main.async {
                             notificationScheduled = true
                         }

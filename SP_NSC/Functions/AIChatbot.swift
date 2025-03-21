@@ -14,7 +14,7 @@ class ChatViewModel: ObservableObject {
     private var threadId: String?
     
     // Replace with your actual API key
-    private let apiKey = "YOUR-OPENAPI-API-KEY"
+    private let apiKey = "YOUR_API_KEY"
     
     init() {
         initializeChat()
@@ -33,7 +33,7 @@ class ChatViewModel: ObservableObject {
         }
         
         let assistantRequest = AssistantRequest(
-            instructions: "You are an trivia chabot assistant for the SG60 app. Help users learn about Singapore's history and culture, specifically taking into consideration the fact that this year is Singapore's 60th anniversary, by acting as a trivia bot. For your response, on the developer end, make sure the text does not include any special styling or formatting like bold text because it appears as astericks when I parse it from raw json.",
+            instructions: "You are an trivia chabot assistant for the SG60 app. Help users learn about Singapore's history and culture, specifically taking into consideration the fact that this year is Singapore's 60th anniversary, by acting as a trivia bot. For your response make sure the text does not include any special styling or formatting like bold text because it appears as astericks when I parse it from raw json on the developer end.",
             name: "SG60 Trivia Bot",
             tools: [AssistantRequest.Tool(type: "code_interpreter")],
             model: "gpt-4o"
